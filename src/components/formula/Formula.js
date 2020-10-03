@@ -1,8 +1,12 @@
-import {ExelComponent} from '@core/ExelComponent';
+import {ExcelComponent} from '@core/ExcelComponent'
 
-export class Formula extends  ExelComponent{
-    toHTML() {
-        // return super.toHTML();
-        return '<h1>Formula</h1>'
-    }
+export class Formula extends ExcelComponent {
+  static className = 'excel__formula'
+
+  toHTML() {
+    return `
+      <div class="info">fx</div>
+      <div class="input" contenteditable spellcheck="false"></div>
+    `
+  }
 }
