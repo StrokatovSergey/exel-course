@@ -3,10 +3,10 @@ const CODES = {
   Z: 90
 }
 
-function createRow(content) {
+function createRow(content, index) {
   return `
     <div class="row">
-        <div class="row-info"></div>
+        <div class="row-info">${index ? index : ''}</div>
         <div class="row-data">${content}</div>
     </div>
   `
@@ -20,11 +20,11 @@ function toColumn(col) {
   `
 }
 
-// function createCell() {
-//   return `
-//     <div class="cell" contenteditable=""></div>
-//   `
-// }
+function toCell() {
+  return `
+    <div class="cell" contenteditable=""></div>
+  `
+}
 
 const toChar = (i) => String.fromCharCode(CODES.A + i)
 
@@ -38,12 +38,14 @@ export function createTable(rowsCount = 15) {
       .map(toColumn)
       .join('')
 
-  console.log(cols);
-
-  rows.push(createRow(cols))
+  rows.push(createRow(cols, null))
 
   for (let i = 0; i < rowsCount; i++) {
-    rows.push(createRow())
+    const cells = new Array(colsCount)
+        .fill('')
+        .map(toCell)
+        .join('')
+    rows.push(createRow(cells, i + 1))
   }
 
 
