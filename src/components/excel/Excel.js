@@ -28,5 +28,12 @@ export class Excel {
     this.$el.append(this.getRoot())
 
     this.components.forEach(component => component.init())
+    this.components.forEach(component => component.$root.css({
+      height: 'auto',
+      width: 'auto',
+      margin : '1px 1px 1px 1px',
+      backgroundColor: 'red'
+    }))
+    // console.log(this.$el.css());
   }
 }

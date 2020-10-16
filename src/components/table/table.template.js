@@ -55,6 +55,7 @@ export function createTable(rowsCount = 15) {
 
     rows.push(createRow(i + 1, cells))
   }
+  rows.push()
 
   return rows.join('')
 }
