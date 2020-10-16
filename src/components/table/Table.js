@@ -1,44 +1,47 @@
-import {$} from '@core/dom'
 import {ExcelComponent} from '@core/ExcelComponent'
-import {createTable} from '@/components/table/table.template';
+import {createTable} from '@/components/table/table.template'
+import {$} from '@core/dom'
 
 export class Table extends ExcelComponent {
   static className = 'excel__table'
 
   constructor($root) {
     super($root, {
-      listeners : ['mousedown', 'mousemove', 'mouseup']
-    });
+      listeners: ['mousedown']
+    })
   }
 
   toHTML() {
-    return createTable()
+    return createTable(20)
   }
 
-  // onClick() {
-  //   console.log('clickes table');
-  // }
-  //
   onMousedown(event) {
     if (event.target.dataset.resize) {
       const $resizer = $(event.target)
+      // const $parent = $resizer.$el.parentNode // bad!
+      // const $parent = $resizer.$el.closest('.column') // better but bad
       const $parent = $resizer.closest('[data-type="resizable"]')
-      const coordsParent = $parent.getCoords()
+      const coords = $parent.getCoords()
+
+      const cells = this.$root.findAll(`[data-col="${$parent.data.col}"]`)
 
       document.onmousemove = e => {
-        const delta = e.pageX - coordsParent.right
-        const value = delta + coordsParent.width
+        console.log('mousemove')
+        const delta = e.pageX - coords.right
+        const value = coords.width + delta
         $parent.$el.style.width = value + 'px'
+        cells.forEach(el => el.style.width = value + 'px')
       }
 
-      document.onmouseup = () => document.onmousemove = null
+      document.onmouseup = () => {
+        document.onmousemove = null
+      }
     }
   }
-
-  onMousemove() {
-    // console.log('onMousemove');
-  }
-  onMouseup() {
-    // console.log('onMouseup');
-  }
 }
+
+// 589 msScripting
+// 2433 msRendering
+
+// 440 msScripting
+// 1771 msRendering
