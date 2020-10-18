@@ -25,9 +25,17 @@ export class Table extends ExcelComponent {
 
       $resizer.css({
         opacity: 1,
-        zIndex: '1000',
-        height: '100vh'
-      })
+        zIndex: '1000'})
+
+      if (type === 'col') {
+        $resizer.css({
+          height: '100vh'
+        })
+      } else {
+        $resizer.css({
+          width: '100vw'
+        })
+      }
 
       const cells = this.$root.findAll(`[data-col="${$parent.data.col}"]`)
 
@@ -38,31 +46,34 @@ export class Table extends ExcelComponent {
           $resizer.css({right: -delta + 'px'})
         } else {
           const delta = e.pageY - coords.bottom
-          const value = coords.height + delta
-          $parent.css({height: value + 'px'})
+          value = coords.height + delta
+          $resizer.css({bottom: -delta + 'px'})
         }
       }
 
       document.onmouseup = () => {
         document.onmousemove = null
         document.onmouseup = null
+        $resizer.css({
+          opacity: '0',
+          zIndex: 'auto'
+        })
+
         if (type === 'col') {
           cells.forEach(el => el.style.width = value + 'px')
           $parent.css({width: value + 'px'})
           $resizer.css({
-            opacity: '0',
-            zIndex: 'auto',
             height: 'auto',
             right: '0'
+          })
+        } else {
+          $parent.css({height: value + 'px'})
+          $resizer.css({
+            width: 'auto',
+            bottom: '0'
           })
         }
       }
     }
   }
 }
-
-// 589 msScripting
-// 2433 msRendering
-
-// 440 msScripting
-// 1771 msRendering
