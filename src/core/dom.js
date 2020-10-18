@@ -17,12 +17,15 @@ class Dom {
     this.html('')
     return this
   }
+
   on(eventType, callback) {
     this.$el.addEventListener(eventType, callback)
   }
+
   off(eventType, callback) {
     this.$el.removeEventListener(eventType, callback)
   }
+
   append(node) {
     if (node instanceof Dom) {
       node = node.$el
@@ -34,6 +37,29 @@ class Dom {
       this.$el.appendChild(node)
     }
 
+    return this
+  }
+
+  get data() {
+    return this.$el.dataset
+  }
+
+  closest(selector) {
+    return $(this.$el.closest(selector))
+  }
+
+  getCoords() {
+    return this.$el.getBoundingClientRect()
+  }
+
+  findAll(selector) {
+    return this.$el.querySelectorAll(selector)
+  }
+  css(styles={}) {
+    const camelToKebab = (string) => string.replace(/([a-z0-9]|(?=[A-Z]))([A-Z])/g, '$1-$2').toLowerCase();
+    for (const [key, value] of Object.entries(styles)) {
+      this.$el.style[camelToKebab(key)] = value
+    }
     return this
   }
 }

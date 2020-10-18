@@ -6,6 +6,7 @@
     "node": true
   },
   "rules": {
+    "key-spacing": "off",
     "no-trailing-spaces": [0, { "skipBlankLines": true }],
     "max-len": [2, {"code": 120, "tabWidth": 2, "ignoreUrls": true}],
     "semi": "off",
