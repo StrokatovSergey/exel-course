@@ -4,8 +4,13 @@ export class TableSelection {
   }
 
   select($el) {
-    console.log('$el', $el);
-    this.group.push($el)
+    if (this.group[0]) {
+      const $prevSelectedCol = this.group[0]
+      $prevSelectedCol.removeClass('selected')
+      this.group[0] = $el
+    } else {
+      this.group.push($el)
+    }
     $el.addClass('selected')
   }
 
