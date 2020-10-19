@@ -1,7 +1,7 @@
-import {resizeHandler} from '@/components/table/table.resize';
+export function shouldResize(event) {
+  return event.target.dataset.resize
+}
 
-export function shouldResize($root, event) {
-  if (event.target.dataset.resize) {
-    resizeHandler($root, event)
-  }
+export function isCell(event) {
+  return event.target.dataset.type === 'cell'
 }
