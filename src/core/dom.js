@@ -26,6 +26,10 @@ class Dom {
     this.$el.removeEventListener(eventType, callback)
   }
 
+  find(selector) {
+    return $(this.$el.querySelector(selector))
+  }
+
   append(node) {
     if (node instanceof Dom) {
       node = node.$el
@@ -60,6 +64,16 @@ class Dom {
     for (const [key, value] of Object.entries(styles)) {
       this.$el.style[camelToKebab(key)] = value
     }
+    return this
+  }
+
+  addClass(className) {
+    this.$el.classList.add(className)
+    return this
+  }
+
+  removeClass(className) {
+    this.$el.classList.remove(className)
     return this
   }
 }
