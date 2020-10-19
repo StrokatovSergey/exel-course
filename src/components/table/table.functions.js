@@ -5,3 +5,7 @@ export function shouldResize(event) {
 export function isCell(event) {
   return event.target.dataset.type === 'cell'
 }
+
+export function isSwiftTouched(event) {
+  return event.shiftKey
+}

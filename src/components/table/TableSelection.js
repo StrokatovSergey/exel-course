@@ -14,7 +14,8 @@ export class TableSelection {
     this.group.forEach($el => $el.removeClass(TableSelection.className))
   }
 
-  selectGroup() {
-
+  selectGroup($el) {
+    this.group.push($el)
+    $el.addClass(TableSelection.className)
   }
 }
