@@ -59,6 +59,18 @@ class Dom {
   findAll(selector) {
     return this.$el.querySelectorAll(selector)
   }
+
+  id(parse) {
+    if (parse) {
+      const parsed = this.id().split(':')
+      return {
+        row: +parsed[0],
+        col: +parsed[1]
+      }
+    }
+    return this.data.id
+  }
+
   css(styles={}) {
     const camelToKebab = (string) => string.replace(/([a-z0-9]|(?=[A-Z]))([A-Z])/g, '$1-$2').toLowerCase();
     for (const [key, value] of Object.entries(styles)) {
