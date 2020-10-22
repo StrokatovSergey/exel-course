@@ -9,6 +9,7 @@ export class TableSelection {
     this.clear()
     this.group.push($el)
     this.current = $el
+    $el.focus()
     $el.addClass(TableSelection.className)
   }
 
