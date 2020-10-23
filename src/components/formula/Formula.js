@@ -20,12 +20,11 @@ export class Formula extends ExcelComponent {
 
   onInput(event) {
     const text = event.target.textContent.trim()
-    this.emitter.emit('myOwnAction', text)
+    this.$emit('formula:input', text)
     // console.log(this);
     // console.log('Formula: onInput', event)
   }
 
-  onClick(event) {
-    console.log('clicked');
+  onClick() {
   }
 }
