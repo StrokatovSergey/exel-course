@@ -44,6 +44,9 @@ export class Table extends ExcelComponent {
     this.$on('formula:done', () => {
       this.selection.current.focus()
     })
+    this.$subscribe((state) => {
+      console.log('tablestate', state);
+    })
   }
 
   onMousedown(event) {
@@ -58,6 +61,7 @@ export class Table extends ExcelComponent {
         this.selection.select($target)
       }
     }
+    this.$dispath({type: 'test'})
   }
 
   onKeydown(event) {
