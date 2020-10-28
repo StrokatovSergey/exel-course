@@ -9,6 +9,7 @@ import {
 import {TableSelection} from '@/components/table/TableSelection';
 import {resizeHandler} from '@/components/table/table.resize';
 import {$} from '@core/dom';
+import * as actions from '@/redux/actions';
 
 export class Table extends ExcelComponent {
   static className = 'excel__table'
@@ -49,9 +50,18 @@ export class Table extends ExcelComponent {
     })
   }
 
+  async resizeTable(event) {
+    try {
+      const data = await resizeHandler(this.$root, event)
+      this.$dispath(actions.tableResize(data))
+    } catch (e) {
+      console.log('error', e)
+    }
+  }
+
   onMousedown(event) {
     if (shouldResize(event)) {
-      resizeHandler(this.$root, event)
+      this.resizeTable(event)
     } else if (isCell(event)) {
       const $target = $(event.target)
       if (event.shiftKey) {
