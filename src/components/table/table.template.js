@@ -5,17 +5,19 @@ const CODES = {
 const DEFAULT_WIDTH = 120;
 const DEFAULT_HEIGHT = 24;
 
-function toCell(colState, row) {
+function toCell(state, row) {
   return function(_, index) {
-    const width = getWidth(colState, index)
+    const id = `${row}:${index}`
+    const textValue = state.dataState[id] || ''
+    const width = getWidth(state.colState, index)
     return `<div 
               class="cell" 
               contenteditable
               data-col="${index}" 
-              data-id="${row}:${index}"
+              data-id="${id}"
               data-type="cell"
               style="width: ${width}"
-            ></div>`
+            >${textValue}</div>`
   }
 }
 
@@ -64,6 +66,7 @@ function withWidthFrom(state) {
   }
 }
 
+
 export function createTable(rowsCount = 15, state = {}) {
   const colsCount = CODES.Z - CODES.A + 1 // Compute cols count
   const rows = []
@@ -80,7 +83,7 @@ export function createTable(rowsCount = 15, state = {}) {
   for (let row = 0; row < rowsCount; row++) {
     const cells = new Array(colsCount)
         .fill('')
-        .map(toCell(state.colState, row))
+        .map(toCell(state, row))
         .join('')
 
     rows.push(createRow(row + 1, cells, state.rowState))
