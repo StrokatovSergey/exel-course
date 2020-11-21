@@ -5,53 +5,53 @@ export class ExcelComponent extends DomListener {
     super($root, options.listeners)
     this.name = options.name || ''
     this.emitter = options.emitter
-    this.unsubscribers = []
+    this.subscribe = options.subscribe || []
     this.store = options.store
-    this.storeSub = null
+    this.unsubscribers = []
 
     this.prepare()
   }
 
-  // настраиваем наш компонент до init
-  prepare() {
-
-  }
+  // Настраивааем наш компонент до init
+  prepare() {}
 
   // Возвращает шаблон компонента
   toHTML() {
     return ''
   }
 
-  // уведомляем слушателей про событие event
+  // Уведомляем слушателей про событие event
   $emit(event, ...args) {
     this.emitter.emit(event, ...args)
   }
 
-  $dispath(action) {
-    this.store.dispatch(action)
-  }
-
-  $subscribe(fn) {
-    this.storeSub = this.store.subscribe(fn)
-  }
-
-  // подписываемся на событие event
-  $on(event, ...args) {
-    const unsub = this.emitter.subscribe(event, ...args)
+  // Подписываемся на событие event
+  $on(event, fn) {
+    const unsub = this.emitter.subscribe(event, fn)
     this.unsubscribers.push(unsub)
   }
 
-  // инициализируем компонент
-  // добавляем DOM слушателеф
+  $dispatch(action) {
+    this.store.dispatch(action)
+  }
+
+  // Сюда приходят только изменения по тем полям, на которые мы подписались
+  storeChanged() {}
+
+  isWatching(key) {
+    return this.subscribe.includes(key)
+  }
+
+  // Инициализируем компонент
+  // Добавляем DOM слушателей
   init() {
     this.initDOMListeners()
   }
 
-  // удаляем компонент
-  // чистим слушатели
+  // Удаляем компонент
+  // Чистим слушатели
   destroy() {
     this.removeDOMListeners()
     this.unsubscribers.forEach(unsub => unsub())
-    this.storeSub.unsubscribe()
   }
 }

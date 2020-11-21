@@ -39,8 +39,8 @@ export function resizeHandler($root, event) {
       }
 
       resolve({
-        type,
         value,
+        type,
         id: $parent.data[type]
       })
 

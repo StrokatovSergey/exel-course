@@ -7,7 +7,7 @@ export function createStore(rootReducer, initialState = {}) {
       listeners.push(fn)
       return {
         unsubscribe() {
-          listeners = listeners.filter(listener => listener !== fn)
+          listeners = listeners.filter(l => l !== fn)
         }
       }
     },
@@ -16,32 +16,9 @@ export function createStore(rootReducer, initialState = {}) {
       listeners.forEach(listener => listener(state))
     },
     getState() {
-      return state
+      return JSON.parse(JSON.stringify(state))
     }
   }
 }
 
-// export class CreateStore {
-//   constructor(rootReducer, initialState= {}) {
-//     this.rootReducer = rootReducer
-//     this.state = rootReducer({...initialState}, {type: '__INIT__'})
-//     this.listeners = []
-//   }
-//   subscribe(fn) {
-//     this.listeners.push(fn)
-//     return {
-//       unsubscribe() {
-//         this.listeners = this.listeners.filter(listener => listener !== fn)
-//       }
-//     }
-//   }
-//
-//   dispatch(action) {
-//     this.state = this.rootReducer(this.state, action)
-//     this.listeners.forEach(listener => listener(this.state))
-//   }
-//
-//   getState() {
-//     return this.state
-//   }
-// }
+// Extra Task - Переписать на класс

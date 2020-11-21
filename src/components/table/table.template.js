@@ -2,40 +2,60 @@ const CODES = {
   A: 65,
   Z: 90
 }
-const DEFAULT_WIDTH = 120;
-const DEFAULT_HEIGHT = 24;
+
+const DEFAULT_WIDTH = 120
+const DEFAULT_HEIGHT = 24
+
+function getWidth(state, index) {
+  return (state[index] || DEFAULT_WIDTH) + 'px'
+}
+
+function getHeight(state, index) {
+  return (state[index] || DEFAULT_HEIGHT) + 'px'
+}
 
 function toCell(state, row) {
-  return function(_, index) {
-    const id = `${row}:${index}`
-    const textValue = state.dataState[id] || ''
-    const width = getWidth(state.colState, index)
-    return `<div 
-              class="cell" 
-              contenteditable
-              data-col="${index}" 
-              data-id="${id}"
-              data-type="cell"
-              style="width: ${width}"
-            >${textValue}</div>`
+  return function(_, col) {
+    const id = `${row}:${col}`
+    const width = getWidth(state.colState, col)
+    const data = state.dataState[id]
+    return `
+      <div 
+        class="cell" 
+        contenteditable 
+        data-col="${col}"
+        data-type="cell"
+        data-id="${id}"
+        style="width: ${width}"
+      >${data || ''}</div>
+    `
   }
 }
 
 function toColumn({col, index, width}) {
   return `
-    <div class="column" data-type="resizable" data-col="${index}" style="width: ${width}">
+    <div 
+      class="column" 
+      data-type="resizable" 
+      data-col="${index}" 
+      style="width: ${width}"
+    >
       ${col}
       <div class="col-resize" data-resize="col"></div>
     </div>
   `
 }
 
-function createRow(index, content, rowState) {
-  const height = getHeight(rowState, index)
-  const dataRow = index > 0 ? `data-row="${index}"` : null
+function createRow(index, content, state = {}) {
   const resize = index ? '<div class="row-resize" data-resize="row"></div>' : ''
+  const height = getHeight(state, index)
   return `
-    <div class="row" data-type="resizable" ${dataRow} style="height: ${height}">
+    <div 
+      class="row" 
+      data-type="resizable" 
+      data-row="${index}"
+      style="height: ${height}"
+    >
       <div class="row-info">
         ${index ? index : ''}
         ${resize}
@@ -49,15 +69,6 @@ function toChar(_, index) {
   return String.fromCharCode(CODES.A + index)
 }
 
-function getWidth(colState, index) {
-  return (colState[index] || DEFAULT_WIDTH) + 'px'
-}
-
-function getHeight(rowState, index) {
-  return (rowState[index] || DEFAULT_HEIGHT) + 'px'
-}
-
-
 function withWidthFrom(state) {
   return function(col, index) {
     return {
@@ -65,7 +76,6 @@ function withWidthFrom(state) {
     }
   }
 }
-
 
 export function createTable(rowsCount = 15, state = {}) {
   const colsCount = CODES.Z - CODES.A + 1 // Compute cols count
@@ -78,7 +88,7 @@ export function createTable(rowsCount = 15, state = {}) {
       .map(toColumn)
       .join('')
 
-  rows.push(createRow(null, cols, {}))
+  rows.push(createRow(null, cols))
 
   for (let row = 0; row < rowsCount; row++) {
     const cells = new Array(colsCount)
@@ -88,7 +98,6 @@ export function createTable(rowsCount = 15, state = {}) {
 
     rows.push(createRow(row + 1, cells, state.rowState))
   }
-  rows.push()
 
   return rows.join('')
 }

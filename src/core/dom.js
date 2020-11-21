@@ -41,11 +41,6 @@ class Dom {
     return $(this.$el.querySelector(selector))
   }
 
-  focus() {
-    this.$el.focus();
-    return this
-  }
-
   append(node) {
     if (node instanceof Dom) {
       node = node.$el
@@ -76,6 +71,14 @@ class Dom {
     return this.$el.querySelectorAll(selector)
   }
 
+  css(styles = {}) {
+    Object
+        .keys(styles)
+        .forEach(key => {
+          this.$el.style[key] = styles[key]
+        })
+  }
+
   id(parse) {
     if (parse) {
       const parsed = this.id().split(':')
@@ -87,11 +90,8 @@ class Dom {
     return this.data.id
   }
 
-  css(styles={}) {
-    const camelToKebab = (string) => string.replace(/([a-z0-9]|(?=[A-Z]))([A-Z])/g, '$1-$2').toLowerCase();
-    for (const [key, value] of Object.entries(styles)) {
-      this.$el.style[camelToKebab(key)] = value
-    }
+  focus() {
+    this.$el.focus()
     return this
   }
 
@@ -106,7 +106,6 @@ class Dom {
   }
 }
 
-// event.target
 export function $(selector) {
   return new Dom(selector)
 }
